@@ -1,0 +1,105 @@
+html {
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  font-family: sans-serif;
+  font-size: 16px;
+}
+
+body {
+  background-color: rgb(181, 189, 225);
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+  height: 100%;
+  width: 100%;
+}
+
+main {
+  grid-column-start: 2;
+  padding: 1rem 2rem;
+  background-color: white;
+  box-shadow: 0 0 1.5rem 0.5rem rgba(54, 52, 101, 0.2);
+  border-left: 2px solid rgba(20, 24, 77, 0.38);
+  border-right: 2px solid rgba(20, 24, 77, 0.38);
+  min-width: 400px;
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+button {
+  font-size: 1rem;
+  height: 1.95rem;
+  border: none;
+  padding: 0.2rem 1rem;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: rgb(77, 55, 149);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #e6e7f0;
+  color: black;
+}
+
+#inp-new-todo {
+  font-size: 1rem;
+  height: 1.75rem;
+  padding: 0 0.5rem;
+  flex: 1;
+}
+
+#add-todo {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  margin-block: 0.7rem;
+}
+
+ul {
+  list-style-type: none;
+  margin-block: 1rem;
+  padding: 0;
+}
+
+#filters {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
+  gap: 0.3rem;
+  width: 100%; /* Ensure the container takes full width */
+  margin-block: 0.7rem;
+}
+
+#filters input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+}
+
+#filters li {
+  width: 100%;
+}
+
+#filters label {
+  display: block;
+  padding: 0.3rem 1rem;
+  cursor: pointer;
+  text-align: center;
+  background-color: #e6e7f0;
+  transition: background-color 0.3s ease;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+#filters input[type="radio"]:checked + label {
+  background-color: rgb(228, 232, 251);
+  border-bottom: 2px solid black;
+}
+
+#list {
+}
