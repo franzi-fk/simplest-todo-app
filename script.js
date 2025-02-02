@@ -20,6 +20,16 @@ if (localStorage.getItem("appState") === null) {
 /* shorter version for the above would be:
 let appState = JSON.parse(localStorage.getItem("appState")) || { todos: [], filters: {all: true, open: false, done: false]} };
 */
+
+// Set idCount to the highest existing ID + 1 or 0 if there are no todos
+if (appState.todos.length === 0) {
+  idCount = 0;
+} else {
+  const allIds = appState.todos.map((todo) => todo.id); // Extract all IDs into an array
+  const maxId = Math.max(...allIds); // find the highest number in the array
+  idCount = maxId; // later we use ++idCount to increment the IDs
+}
+
 const btnAdd = document.querySelector("#btn-add-todo");
 const inpNewTodo = document.querySelector("#inp-new-todo");
 let filteredTodos = appState.todos; // initialize filteredTodos
@@ -70,7 +80,7 @@ function renderFilters() {
 
     // add label for radio button
     const radioLabel = document.createElement("label");
-    radioLabel.setAttribute("for", filterKey); // label.for = ... wouldnt work because "for" is a reserved keyword, and in JavaScript
+    radioLabel.setAttribute("for", filterKey); // label.for = ... wouldnt work because "for" is a reserved keyword in JavaScript
     const radioLabelText = document.createTextNode(filterKey);
 
     // Add to DOM
@@ -95,16 +105,18 @@ function renderTodos() {
     const checkbox = document.createElement("input"); // Create a checkbox input element
     checkbox.type = "checkbox"; // Set the input type to checkbox
     checkbox.checked = todo.doneState; // Set the checkbox state based on the todo item
+    checkbox.id = "checkbox-" + todo.id;
 
     checkbox.todoObj = todo; // Attach the todo object to the checkbox (so the checkbox knows which to do it belongs to -> needed for definition of updateTodoState())
 
     // Add an event listener to update the doneState when the checkbox is clicked
     checkbox.addEventListener("change", updateTodoState);
 
-    todoLi.append(checkbox); // Add the checkbox to the list item
-
+    const checkboxLabel = document.createElement("label");
+    checkboxLabel.setAttribute("for", checkbox.id);
     const todoText = document.createTextNode(todo.description); // Create a text node with the todo description
-    todoLi.append(todoText); // Append the text to the list item
+    checkboxLabel.append(todoText); // Append the text to the list item
+    todoLi.append(checkbox, checkboxLabel); // Add the checkbox & label to the list item
 
     list.append(todoLi); // Add the list item to the list element
   });
@@ -112,7 +124,8 @@ function renderTodos() {
 
 // Callback function for evenListener > to add a new todo
 // Modifies appState
-function addTodo() {
+function addTodo(event) {
+  event.preventDefault();
   const inpNewTodoValue = inpNewTodo.value.trim(); // Removes spaces from input value
 
   // Check if user input is empty
@@ -138,9 +151,18 @@ function addTodo() {
     doneState: false,
   });
 
+  applyFilter();
   renderTodos(); // render appState
   inpNewTodo.value = ""; // clear input field
+  inpNewTodo.focus();
   updateLocalStorage();
+
+  // Scroll the list container to the bottom after adding a todo
+  const contentContainer = document.querySelector("#content");
+  setTimeout(() => {
+    // Ensure that the list container scrolls to bottom
+    contentContainer.scrollTop = contentContainer.scrollHeight;
+  }, 100); // Small delay to ensure DOM is rendering before scrolling happens
 }
 
 // Callback function for eventListener > to update the doneState of a todo item
@@ -149,8 +171,11 @@ function updateTodoState(event) {
   const todo = event.target.todoObj; // Get the associated todo object from the checkbox
   const currentTodoState = event.target.checked; // Get the updated checkbox state
   todo.doneState = currentTodoState; // Update the doneState in the state object
-  renderTodos(); // Re-render the todo list to reflect the changes
-  updateLocalStorage();
+  setTimeout(() => {
+    applyFilter(); // Reapply the filter after the delay
+    renderTodos(); // Re-render the todo list after the filter is applied
+    updateLocalStorage();
+  }, 800);
 }
 
 // Callback function for eventListener > to update filters
@@ -178,17 +203,18 @@ function updateLocalStorage() {
 // Function that shows a hint that this to do already exists
 function showHintDuplicate() {
   const hintDuplicate = document.createElement("span");
+  hintDuplicate.id = "hint-duplicate";
   const hintDuplicateText = document.createTextNode(
     "This todo already exists."
   );
   hintDuplicate.append(hintDuplicateText);
 
-  const div = document.querySelector("div");
+  const div = document.querySelector("#content");
   div.append(hintDuplicate);
 
   // Set a timeout to remove the warning message after 6 seconds (6000 milliseconds)
   setTimeout(() => {
     hintDuplicate.remove();
-  }, 3000); // remove hint after 3s
+  }, 2400); // remove hint after 3s
   inpNewTodo.value = "";
 }

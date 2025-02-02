@@ -42,12 +42,13 @@ main {
 
 #content {
   padding: 0 2rem;
-  overflow-y: auto; /* Allows scrolling */
   margin: 0;
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-bottom: 1rem; /* Give space at the bottom for better scroll visibility*/
 }
 
 #container-modify-list {
-  padding: 1rem 2rem 2rem 2rem;
+  padding: 1rem 2rem 2.1rem 2rem;
   background-color: rgb(255, 255, 255);
   position: sticky;
   bottom: 0;
@@ -91,7 +92,7 @@ button {
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
-  margin-block: 0.7rem;
+  margin-block: 0.7rem 1.3rem;
 }
 
 ul {
@@ -160,4 +161,22 @@ ul {
   width: 1rem;
   accent-color: rgb(81, 55, 166);
   flex-shrink: 0;
+}
+
+#hint-duplicate {
+  background-color: rgb(255, 205, 205);
+  padding: 0.65rem 1rem;
+  border: 2px solid rgb(234, 157, 157);
+  color: rgb(69, 0, 0);
+  border-radius: 0.15rem;
+  position: fixed;
+  bottom: 9.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+}
+
+li label,
+li input[type="checkbox"] {
+  cursor: pointer;
 }
