@@ -211,9 +211,7 @@ function removeDoneTodos(event) {
 function showHintDuplicate() {
   const hintDuplicate = document.createElement("span");
   hintDuplicate.id = "hint-duplicate";
-  const hintDuplicateText = document.createTextNode(
-    "This todo already exists."
-  );
+  const hintDuplicateText = document.createTextNode("Todo already exists.");
   hintDuplicate.append(hintDuplicateText);
 
   const div = document.querySelector("#content");
@@ -224,6 +222,7 @@ function showHintDuplicate() {
     hintDuplicate.remove();
   }, 2400); // remove hint after 3s
   inpNewTodo.value = "";
+  inpNewTodo.focus();
 }
 
 // Function to save current appState to Local Storage
