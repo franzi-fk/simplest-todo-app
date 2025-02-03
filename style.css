@@ -203,3 +203,25 @@ li label,
 li input[type="checkbox"] {
   cursor: pointer;
 }
+
+/*_____________________________________________*/
+/*-------------------MOBILE--------------------*/
+
+@media (max-width: 600px) {
+  body {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  main {
+    grid-column-start: 1;
+    grid-column-end: -1;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100%;
+    width: 100%;
+    box-shadow: none;
+    border: none;
+    background-color: rgb(255, 255, 255);
+  }
+}
