@@ -31,6 +31,7 @@ if (appState.todos.length === 0) {
 }
 
 const btnAdd = document.querySelector("#btn-add-todo");
+const btnRemoveDone = document.querySelector("#btn-remove-done");
 const inpNewTodo = document.querySelector("#inp-new-todo");
 let filteredTodos = appState.todos; // initialize filteredTodos
 
@@ -41,6 +42,7 @@ renderTodos(); // Initial rendering of the todo list
 renderFilters(); // Initial rendering of filters
 
 btnAdd.addEventListener("click", addTodo);
+btnRemoveDone.addEventListener("click", removeDoneTodos);
 
 /*_________________________________________________________________*/
 
@@ -195,9 +197,14 @@ function updateFilters(event) {
   updateLocalStorage();
 }
 
-// Function to save current appState to Local Storage
-function updateLocalStorage() {
-  localStorage.setItem("appState", JSON.stringify(appState));
+// Callback function for eventListener > to remove done todos
+// Modifies appState
+function removeDoneTodos(event) {
+  appState.todos = appState.todos.filter((todo) => todo.doneState !== true);
+
+  applyFilter();
+  renderTodos();
+  updateLocalStorage();
 }
 
 // Function that shows a hint that this to do already exists
@@ -217,4 +224,9 @@ function showHintDuplicate() {
     hintDuplicate.remove();
   }, 2400); // remove hint after 3s
   inpNewTodo.value = "";
+}
+
+// Function to save current appState to Local Storage
+function updateLocalStorage() {
+  localStorage.setItem("appState", JSON.stringify(appState));
 }

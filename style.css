@@ -163,6 +163,10 @@ ul {
   flex-shrink: 0;
 }
 
+input[type="checkbox"]:checked + label {
+  text-decoration: line-through;
+}
+
 #hint-duplicate {
   background-color: rgb(255, 205, 205);
   padding: 0.65rem 1rem;
