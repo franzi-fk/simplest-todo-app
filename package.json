@@ -1,0 +1,16 @@
+{
+  "name": "simple-todo-app",
+  "version": "1.0.0",
+  "description": "Simplest todo app",
+  "scripts": {
+    "serve": "serve ./src",
+    "e2e": "cypress open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^14.0.2",
+    "serve": "^14.2.4"
+  }
+}

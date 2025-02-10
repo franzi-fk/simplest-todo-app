@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Franziska Kiel">
+    <title>The Simplest Todo App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main>
+        <div id="header">
+            <h1>my todos</h1>
+            <ul id="filters"></ul>
+        </div>
+        <div id="content">
+            <ul id="list"></ul>
+        </div>
+        <div id="container-modify-list">
+            <form id="add-todo">
+                <input type="text" id="inp-new-todo" placeholder="enter a new todo...">
+                <button id="btn-add-todo" class="btn-primary">add</button>
+            </form>
+            <button id="btn-remove-done" class="btn-secondary">remove done todos</button>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>
