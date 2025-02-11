@@ -13,17 +13,17 @@
     <main>
         <div id="header">
             <h1>my todos</h1>
-            <ul id="filters"></ul>
+            <ul id="filters" data-cy="filters-list"></ul>
         </div>
         <div id="content">
-            <ul id="list"></ul>
+            <ul id="list" data-cy="todo-list"></ul>
         </div>
         <div id="container-modify-list">
             <form id="add-todo">
-                <input type="text" id="inp-new-todo" placeholder="enter a new todo...">
-                <button id="btn-add-todo" class="btn-primary">add</button>
+                <input type="text" id="inp-new-todo" data-cy="inp-new-todo" placeholder="enter a new todo...">
+                <button id="btn-add-todo" class="btn-primary" data-cy="btn-add-todo">add</button>
             </form>
-            <button id="btn-remove-done" class="btn-secondary">remove done todos</button>
+            <button id="btn-remove-done" class="btn-secondary" data-cy="btn-remove-done">remove done todos</button>
         </div>
     </main>
     <script src="script.js"></script>

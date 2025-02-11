@@ -68,10 +68,12 @@ function renderFilters() {
   // Loop through the filter keys in the appState.filters object
   Object.keys(appState.filters).forEach((filterKey) => {
     const filtersListEl = document.createElement("li");
+    filtersListEl.setAttribute("data-cy", "filters-list-el");
     const filterRadio = document.createElement("input");
     filterRadio.type = "radio";
     filterRadio.name = "filter"; // Ensures radio buttons are grouped
     filterRadio.id = filterKey; // Set the radio button id to the filter key (all, done, open)
+    filterRadio.setAttribute("data-cy", "filter-radiobutton");
 
     // Set radio button status
     filterRadio.checked = appState.filters[filterKey];
@@ -82,6 +84,7 @@ function renderFilters() {
 
     // add label for radio button
     const radioLabel = document.createElement("label");
+    radioLabel.setAttribute("data-cy", "filter-label");
     radioLabel.setAttribute("for", filterKey); // label.for = ... wouldnt work because "for" is a reserved keyword in JavaScript
     const radioLabelText = document.createTextNode(filterKey);
 
@@ -104,10 +107,12 @@ function renderTodos() {
   // Loop through each todo item in the appState
   filteredTodos.forEach((todo) => {
     const todoLi = document.createElement("li"); // Create a list item element
+    todoLi.setAttribute("data-cy", "todo-list-el");
     const checkbox = document.createElement("input"); // Create a checkbox input element
     checkbox.type = "checkbox"; // Set the input type to checkbox
     checkbox.checked = todo.doneState; // Set the checkbox state based on the todo item
     checkbox.id = "checkbox-" + todo.id;
+    checkbox.setAttribute("data-cy", "todo-checkbox");
 
     checkbox.todoObj = todo; // Attach the todo object to the checkbox (so the checkbox knows which to do it belongs to -> needed for definition of updateTodoState())
 
@@ -116,6 +121,7 @@ function renderTodos() {
 
     const checkboxLabel = document.createElement("label");
     checkboxLabel.setAttribute("for", checkbox.id);
+    checkboxLabel.setAttribute("data-cy", "todo-checkbox-label");
     const todoText = document.createTextNode(todo.description); // Create a text node with the todo description
     checkboxLabel.append(todoText); // Append the text to the list item
     todoLi.append(checkbox, checkboxLabel); // Add the checkbox & label to the list item
@@ -211,6 +217,7 @@ function removeDoneTodos(event) {
 function showHintDuplicate() {
   const hintDuplicate = document.createElement("span");
   hintDuplicate.id = "hint-duplicate";
+  hintDuplicate.setAttribute("data-cy", "hint-duplicate");
   const hintDuplicateText = document.createTextNode("Todo already exists.");
   hintDuplicate.append(hintDuplicateText);
 
