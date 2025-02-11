@@ -1,9 +1,11 @@
+// sets up autocompletion for cypress in vs code
 /// <reference types="cypress" />
 
 describe("todo app key functionalities", () => {
   beforeEach(() => {
     cy.visit("http://localhost:3000/");
   });
+
   it("loads page & content", () => {
     cy.get("#list");
     cy.get("#filters li");
@@ -19,6 +21,16 @@ describe("todo app key functionalities", () => {
     cy.get("#btn-add-todo").click();
     cy.get("#list li").last().should("have.text", randomInput.toString());
     cy.get("#list li input[type=checkbox]").last().should("not.be.checked");
+  });
+
+  it("rejects duplicate todos", () => {
+    let input = "Hello World";
+    cy.get("#inp-new-todo").type(input);
+    cy.get("#btn-add-todo").click();
+    cy.get("#inp-new-todo").type(input);
+    cy.get("#btn-add-todo").click();
+    cy.get("#list li").should("have.length", 1);
+    cy.get("#hint-duplicate").should("have.text", "Todo already exists.");
   });
 
   it("checks todo and marks as done", () => {
@@ -136,8 +148,41 @@ describe("todo app key functionalities", () => {
 });
 
 describe("todo app local storage", () => {
+  it("saves data to localStorage", () => {
+    // Visit the app
+    cy.visit("http://localhost:3000");
+
+    // add 3 new todos
+    cy.get("#inp-new-todo").type("Hello");
+    cy.get("#btn-add-todo").click();
+    cy.get("#inp-new-todo").type("Test");
+    cy.get("#btn-add-todo").click();
+    cy.get("#inp-new-todo").type("Todo");
+    cy.get("#btn-add-todo").click();
+
+    // mark 1 todo as done
+    cy.get("#list li input[type=checkbox]").last().click();
+
+    // apply open filter
+    cy.get("label[for=open]")
+      .click()
+      // we need .then to fix cypress command queue (check https://glebbahmutov.com/blog/cypress-local-storage/)
+      .then(() => {
+        // verify localStorage
+        const appState = JSON.parse(window.localStorage.getItem("appState"));
+        expect(appState).to.deep.equal({
+          filters: { all: false, open: true, done: false },
+          todos: [
+            { id: 1, description: "Hello", doneState: false },
+            { id: 2, description: "Test", doneState: false },
+            { id: 3, description: "Todo", doneState: true },
+          ],
+        });
+      });
+  });
+
   it("loads and renders todos from localStorage", () => {
-    // Prepare appState object with some test data
+    // prepare appState object with some test data
     const testAppState = {
       todos: [
         { id: 1, description: "Test Todo 1", doneState: false },
@@ -150,21 +195,49 @@ describe("todo app local storage", () => {
       },
     };
 
-    // Set the appState in localStorage before visiting the page
+    // set the appState in localStorage before visiting the page
     cy.window().then((window) => {
       window.localStorage.setItem("appState", JSON.stringify(testAppState));
     });
 
-    // Visit the app
+    // visit the app
     cy.visit("http://localhost:3000");
 
-    // Wait for the todos to render
-    cy.get("#list li", { timeout: 10000 }).should("have.length", 2); // Wait for the list items to appear
+    // verify list length
+    cy.get("#list li", { timeout: 10000 }).should("have.length", 2);
 
-    // Verify that the todos are rendered in the UI
+    // verify that the todos equal appState
     cy.get("#list li").first().should("have.text", "Test Todo 1");
     cy.get("#list li input[type=checkbox]").first().should("not.be.checked");
     cy.get("#list li").last().should("have.text", "Test Todo 2");
     cy.get("#list li input[type=checkbox]").last().should("be.checked");
+  });
+
+  it("loads and renders filters from localStorage", () => {
+    // prepare appState object with some test data
+    const testAppState = {
+      todos: [
+        { id: 1, description: "Test Todo 1", doneState: false },
+        { id: 2, description: "Test Todo 2", doneState: true },
+        { id: 3, description: "Test Todo 3", doneState: true },
+      ],
+      filters: {
+        all: false,
+        open: false,
+        done: true,
+      },
+    };
+
+    // set the appState in localStorage before visiting the page
+    cy.window().then((window) => {
+      window.localStorage.setItem("appState", JSON.stringify(testAppState));
+    });
+
+    // visit the app
+    cy.visit("http://localhost:3000");
+
+    // verify the filter from appState got applied
+    cy.get("#done").should("be.checked");
+    cy.get("#list li input[type=checkbox]").should("be.checked");
   });
 });
