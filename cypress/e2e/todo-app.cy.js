@@ -25,17 +25,37 @@ describe("todo app key functionalities", () => {
     cy.get('[data-cy="todo-checkbox"]').last().should("not.be.checked");
   });
 
-  it("rejects duplicate todos", () => {
+  it("rejects duplicate todos (case-insensitive)", () => {
     let input = "Hello World";
     cy.get('[data-cy="inp-new-todo"]').type(input);
     cy.get('[data-cy="btn-add-todo"]').click();
     cy.get('[data-cy="inp-new-todo"]').type(input);
+    cy.get('[data-cy="btn-add-todo"]').click();
+    cy.get('[data-cy="inp-new-todo"]').type("hello world");
     cy.get('[data-cy="btn-add-todo"]').click();
     cy.get('[data-cy="todo-list-el"]').should("have.length", 1);
     cy.get('[data-cy="hint-duplicate"]').should(
       "have.text",
       "Todo already exists."
     );
+  });
+
+  it("rejects empty todo", () => {
+    cy.get('[data-cy="inp-new-todo"]').type("Test Todo");
+    cy.get('[data-cy="btn-add-todo"]').click();
+    cy.get('[data-cy="inp-new-todo"]').type("     ");
+    cy.get('[data-cy="btn-add-todo"]').click();
+    cy.get('[data-cy="todo-list-el"]').should("have.length", 1);
+    cy.get('[data-cy="todo-list-el"]').last().should("have.text", "Test Todo");
+  });
+
+  it("removes spaces from todo input start & end", () => {
+    cy.get('[data-cy="inp-new-todo"]').type("  hello world   ");
+    cy.get('[data-cy="btn-add-todo"]').click();
+    cy.get('[data-cy="todo-list-el"]').should("have.length", 1);
+    cy.get('[data-cy="todo-list-el"]')
+      .last()
+      .should("have.text", "hello world");
   });
 
   it("checks todo and marks as done", () => {
